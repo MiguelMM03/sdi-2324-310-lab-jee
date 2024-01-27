@@ -14,7 +14,7 @@ public class ServletShoppingCart extends HttpServlet {
         HttpSession session = request.getSession();
         HashMap<String, Integer> cart =
                 (HashMap<String, Integer>) session.getAttribute("cart");
-// No hay carrito, creamos uno y lo insertamos en sesión
+        // No hay carrito, creamos uno y lo insertamos en sesión
         if (cart == null) {
             cart = new HashMap<String, Integer>();
             session.setAttribute("cart", cart);
@@ -23,14 +23,8 @@ public class ServletShoppingCart extends HttpServlet {
         if (product != null) {
             addToShoppingCart(cart, product);
         }
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("<HTML>");
-        out.println("<HEAD><TITLE>Tienda SDI: Cesta de la compra</TITLE></HEAD>");
-        out.println("<BODY>");
-        out.println(shoppingCartToHtml(cart) + "<br>");
-        out.println("<a href=\"index.jsp\">Volver</a></BODY></HTML>");
+        request.setAttribute("selectedItems", cart);
+        getServletContext().getRequestDispatcher("/cart.jsp").forward(request, response);
     }
 
     private void addToShoppingCart(Map<String, Integer> cart, String productKey) {
